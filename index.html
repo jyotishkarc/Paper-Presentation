@@ -2,10 +2,10 @@
     <head>
         <meta charset="utf-8">
 
-        <title>Visualizing Data using t-SNE</title>
+        <title>Lovasz Local Lemma & its Applications</title>
 
         <meta name="description" content="SP2020">
-        <meta name="author" content="Jyotishka Ray Choudhury">
+        <meta name="author" content="JRC">
 
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,587 +28,625 @@
                 <section data-background="sp2020/network.gif" data-background-opacity=0.12 style="font-size: 33px;" data-auto-animate
 				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
                     <h3 id="heading" style="color: white; text-align: center; margin-bottom: 0.8cm; font-size: 60px;">
-                        <b>Visualizing Data using t-SNE</b>
+                        <b>Lovasz Local Lemma & its Applications</b>
                     </h3>
-
-					<div data-id="authors" style="text-align: center; margin-bottom: 1cm;" data-auto-animate>
-						<em>Laurens van der Maaten</em> & <em>Geoffrey Hinton</em>
-                        <br>
-					</div>
-
-					<div style="text-align: center; margin-bottom: 0.8cm; font-size: 30px;" data-auto-animate>
-						<strong>Journal of Machine Learning Research, Vol. 9 (2008)</strong> 2579-2605
-					</div>
                     <hr>
-                    <div style="text-align: center; margin-top: 1.5cm;">
+                    <div style="text-align: center; margin-top: 0.6cm;">
                         A presentation by:
                         <br>
 					</div>
 					<div style="text-align: center; margin-top: 0.5cm;">
                         <strong>Jyotishka Ray Choudhury (BS1903)</strong>
-                        <br>
-                        B.Stat 3rd Year<br>
-						Indian Statistical Institute, Kolkata
-                    </div>
-					<div style="text-align: center; margin-top: 0.8cm;">
-                        20th April, 2022
-                        <br>
-					</div>
-                </section>
-
-                <section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left;" data-auto-animate
-				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
-                    <h3 id="heading" style="color: white; text-align: center; margin-bottom: 0.8cm; margin-top: 0.8cm; font-size: 60px;">
-                        <b>Visualizing Data using t-SNE</b>
-                    </h3>
-
-					<div data-id="authors" style="text-align: center; margin-bottom: 1cm; font-size: 35px;" data-auto-animate>
-						<em>Laurens van der Maaten</em> & <em>Geoffrey Hinton</em>
-                        <br>
-					</div>
-                    <hr>
-					<div class="r-stack">
-						<img data-src="sp2020/tsne-snip-border.jpg" alt="sometext"/>
 						<br>
+						<strong>Soutim Das (BS1910)</strong>
+                        <br>
+                    </div>
+					<div style="text-align: center; margin-top: 0.5cm; margin-bottom: 0.7cm;" data-auto-animate>
+						B.Stat 3rd Year<br>
+						Indian Statistical Institute, Kolkata
+					</div>
+					<hr>
+					<div style="text-align: center; margin-top: 0.8cm;" data-auto-animate>
+						<em>Presentation for <strong>Random Graphs</strong></em>
+                        <br>
+					</div>
+					<div style="text-align: center; margin-top: 0.4cm;">
+                        13th May, 2022
+                        <br>
 					</div>
                 </section>
 
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3>
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;" data-auto-animate>
+                    <h3 data-id="intro">
                         Introduction
                     </h3>
 
-                    <strong>t-distributed Stochastic Neighbour Embedding</strong>, commonly known as <strong>t-SNE</strong>, is a statistical method for visualizing high-dimensional data, as well as a non-linear technique of dimension reduction.
-                    
+                    Let $\mathscr{A} = \{A_1, A_2, \cdots, A_n\}$ be a finite set of events in some 
+					arbitrary probability space, say $(\Omega,\mathscr{A},\mathbb{P})$.
+
 					<div style="margin-top: 0.7cm ;">
-						<ul>
-							<li class="fragment">
-								t-SNE is an <strong>unsupervised statistical learning algorithm</strong>, i.e. it works on unlabeled data
-								without any prior training.
-							</li>
-						</ul>
+						<blockquote style="width: auto;">
+							In probabilistic methods, we often try to show whether an object that satisfies 
+							some desired property exists or not, in a finite collection of objects.
+						</blockquote>
 					</div>
 
-					<div style="margin-top: 0.5cm ;">
+					<div class="fragment" style="margin-top: 0.7cm ;">
+							Naturally, if such an object exists, there should be a positive probability that 
+							a randomly chosen object from the collection will satisfy the desired property. 
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;" data-auto-animate="">
+                    <h3 data-id="intro">
+                        Introduction
+                    </h3>
+                    
+                    <div>
 						<ul>
 							<li class="fragment">
-								t-SNE works by giving each datapoint a location in 2D or 3D space, preserving some structures 
-								in the original dataset.
+								In a probability space $(\Omega,\mathscr{A},\mathbb{P})$, let $E = \{E_1, E_2, \cdots, E_n\}$
+								be the set of all "bad" events, i.e. the events whose occurence is not desirable. Naturally, we shall be 
+								interested in the occurence of an event that does not belong to $E$. We can refer to such an event 
+								as a "good" event.
+							</li>
+
+							<li class="fragment" style="margin-top: 0.5cm;">
+								In order for this to happen, we shall require the condition that 
+								$$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) > 0$$
+							</li>
+
+							<li class="fragment" style="margin-top: 0.5cm;">
+								A very natural question that arises is that <strong>is this always possible?</strong>
 							</li>
 						</ul>
 					</div>
                 </section>
 
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px; margin-top: 1.7cm;">
+                    <h3 style="font-size: 50px;">
+                        Dependence among events
+                    </h3>
+                    
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Independent bad events
+						</h2>
+
+						<div>
+							<ul>
+								<li class="fragment">
+									Note that if all the bad events are independent from each other, and their 
+									probabilities are bounded above by some $p < 1$, then we shall have:
+									$$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) 
+									= 1 - \mathbb{P}\left(\bigcup_{i = 1}^n E_i\right)
+									= 1 - \prod_{i = 1}^n \mathbb{P}(E_i)
+									> 1 - p^n > 0$$
+								</li>
+								<li class="fragment">
+									In that case, we can guarantee the occurence of a good event, with positive probability.
+								</li>
+							</ul>
+						</div>
+					</section>
+					
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Completely disjoint bad events
+						</h2>
+
+						<div>
+							<ul>
+								<li class="fragment">
+									If all the $E_i$'s are disjoint, and they collectively span the whole 
+									$\Omega$, i.e. if $E_1 \cup \cdots \cup E_n = \Omega$, then we shall have: 
+									$$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) 
+									= 1 - \mathbb{P}\left(\bigcup_{i = 1}^n E_i\right)
+									= 1 - 1 = 0$$
+								</li>
+								<li class="fragment">
+									In that case, we can see that a good event is impossible to occur.
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 33px; margin-bottom: 1cm;">
+							But what if the bad events have restricted dependence?
+						</h2>
+
+						<div>
+							<ul>
+								<li class="fragment fade-in-then-out">
+									If it somehow happens that the bad events have some limited dependent structure,
+									i.e. if all the $E_i$'s are dependent upon at most $d$ many $E_j$'s, the union bound 
+									fails to deliver a fruitful result, since $$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) 
+									= 1 - \mathbb{P}\left(\bigcup_{i = 1}^n E_i\right)
+									\geqslant 1 - \sum_{i = 1}^n \mathbb{P}(E_i)$$ and if the last sum is greater than $1$ 
+									(which is very much possible if the $E_i$'s have large overlaps), 
+									the probability statement that we can make is redundant.
+								</li>
+							</ul>
+						</div>	
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 33px; margin-bottom: 1cm;">
+							But what if the bad events have restricted dependence?
+						</h2>
+
+						<div>
+							<blockquote class="fragment" style="width: auto; margin-bottom: 0.8cm;">
+								<ul>
+									<li>
+										In adverse situations like this, the Lovasz Local Lemma comes as a saviour.
+									</li>
+
+									<li style="margin-top: 0.5cm; margin-bottom: 0.5cm;">
+										Under some restricted dependence among the bad events, Lovasz Local Lemma 
+										ensures that a good event will occur with positive probability.
+									</li>
+								</ul>
+							</blockquote>
+							<hr>
+
+							<div class="fragment" style="margin-top: 0.8cm;">
+								We shall be discussing two versions of the Lovasz Local Lemma, viz.
+								<ul>
+									<li style="margin-top: 0.3cm;"><b>Symmetric Lovasz Local Lemma</b></li>
+									<li style="margin-top: 0.3cm;"><b>Asymmetric / General Lovasz Local Lemma</b></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+                </section>
+
+				
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Mutual Independence
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						<blockquote style="width: auto; margin-bottom: 1cm;">
+							An event $A$ in an arbitrary probability space is <strong>mutually independent</strong>
+							of a set $\mathscr{B}$ of some other events, if for every $S \in \mathscr{B}$, we have
+							$$\mathbb{P}\left(A~\bigg\vert \bigcap_{B \in S} B\right) = \mathbb{P}(A)$$
+						</blockquote>
+
+						This should be noted that an event may be pairwise independent to every event in $\mathscr{B}$,
+						but the events may not be mutually independent.
+					</div>
+
+
+                </section>
+
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 27px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Symmetric Lovasz Local Lemma
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						<blockquote class="fragment" style="width: auto; margin-top: 0.3cm;">
+							Suppose $\mathscr{A} = \{A_1, \cdots, A_n\}$ is a set of events in an 
+							arbitrary probability space. If for all $i = 1,2, \cdots, n$,
+
+							<ul>
+								<li style="margin-bottom: 0.3cm; margin-top: 0.5cm;">
+									$\exists~D_i \subset \mathscr{A}$, with $|D_i| \leqslant d,$ such that 
+									$A_i$ is mutually independent of $\mathscr{A} \setminus D_i$
+								</li>
+
+								<li style="margin-bottom: 0.3cm;">
+									$\mathbb{P}(A_i) \leqslant p$
+								</li>
+
+								<li style="margin-bottom: 0.5cm;">
+									$p(d+1) > \frac{1}{e}$
+								</li>
+							</ul>
+							then we shall have: 
+							$$\mathbb{P}\left(\bigcap_{i = 1}^n A_i^c\right) > 0$$
+						</blockquote>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 27px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Asymmetric Lovasz Local Lemma
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						<blockquote class="fragment" style="width: auto; margin-top: 0.3cm;">
+							Suppose $\mathscr{A} = \{A_1, \cdots, A_n\}$ is a set of events in an 
+							arbitrary probability space. If for all $i = 1,2, \cdots, n$,
+
+							<ul>
+								<li style="margin-bottom: 0.3cm; margin-top: 0.5cm;">
+									$\exists~D_i \subset \mathscr{A}$, with $|D_i| \leqslant d,$ such that 
+									$A_i$ is mutually independent of $\mathscr{A} \setminus D_i$
+								</li>
+
+								<li style="margin-bottom: 0.3cm;">
+									$\exists~x_i \in [0,1)~$ such that $~\displaystyle\mathbb{P}(A_i) \leqslant 
+									x_i\cdot \prod_{j : A_j \in D_i} \big(1 - x_j\big)$
+								</li>
+							</ul>
+							then we shall have: 
+							$$\mathbb{P}\left(\bigcap_{i = 1}^n A_i^c\right) \geqslant \prod_{i = 1}^n
+							(1 - x_i) > 0$$
+						</blockquote>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 25px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Proof of Symmetric LLL
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment" style="margin-bottom: 0.2cm;">
+								If $d = 0$, then all the $E_i$'s are independent, and symmetric LLL holds.
+							</li>
+
+							<li class="fragment" style="margin-bottom: 0.2cm;">
+								If $d > 0$, let us put $x_i = \frac{1}{d+1}$, for all $i = 1,2, \cdots, n$.
+							</li>
+
+							<li class="fragment" style="margin-bottom: 0.2cm;">
+								We shall be using the fact that for all $x\geqslant 0$, 
+								$\left(1-\frac{1}{x+1}\right)^x \geqslant \frac{1}{e} \cdot$
+							</li>
+
+							<li class="fragment" style="margin-bottom: 0.2cm;">
+								Thus, we have, $$x_i \prod_{i = 1}^n \big(1-x_j\big) \geqslant
+								\frac{1}{d+1}\left(1-\frac{1}{d+1}\right)^d \geqslant \frac{1}{e(d+1)} \geqslant
+								p \geqslant \mathbb{P}(A_i)$$
+							</li>
+
+							<li class="fragment" style="margin-bottom: 0.2cm;">
+								Thus, by Asymmetric LLL, $$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) > 
+								\left(1-\frac{1}{d+1}\right)^n > 0$$
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Some Applications of LLL
+					</h3>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Positioning of Crystal Beads
+						</h2>
+
+						<blockquote class="fragment" style="width: auto;">
+							Suppose $11n$ points are placed around a circle and colored with $n$ different colors 
+							in such a way that each color is applied to exactly $11$ points. In any such coloring, 
+							there must be a set of $n$ points containing one point of each color but not containing 
+							any pair of adjacent points.	
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment">
+									Imagine picking a point of each color randomly, with all points equally likely 
+									(i.e., having probability $\frac{1}{11}$) to be chosen. The $11n$ different events we want 
+									to avoid correspond to the $11n$ pairs of adjacent points on the circle. For each 
+									pair our odds of picking both points in that pair is at most $\frac{1}{121}$ (exactly $\frac{1}{121}$) 
+									if the two points are of different colors, otherwise $0$), so we will take $p = \frac{1}{121}$.
+								</li>
+							</ul>
+						</div>	
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Positioning of Crystal Beads
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Whether a given pair (a, b) of points is chosen depends only on what 
+									happens in the colors of a and b, and not at all on whether any other 
+									collection of points in the other n − 2 colors are chosen. This implies 
+									the event "a and b are both chosen" is dependent only on those pairs of 
+									adjacent points which share a color either with a or with b.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									There are 11 points on the circle sharing a color with a (including a 
+									itself), each of which is involved with 2 pairs. This means there are 
+									21 pairs other than (a, b) which include the same color as a, and the 
+									same holds true for b. The worst that can happen is that these two sets
+									 are disjoint, so we can take d = 42 in the lemma. This gives $ep(d+1) \approx 0.966 
+									 < 1$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									By LLL, there is a positive probability that none of the bad events occur, 
+									meaning that our set contains no pair of adjacent points. This implies that a set 
+									satisfying our conditions must exist.
+								</li>
+							</ul>
+						</div>	
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							2-colorability of Hypergraphs
+						</h2>
+
+						<blockquote class="fragment" style="width: auto;">
+							Suppose $H$ is a $k$-uniform, $k$-regular hypergraph.
+							 What conditions on H will ensure that $H$ is 2-colorable?	
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Let each vertex toss a fair coin.
+									If an outcome is head, we color that vertex red, and blue otherwise.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									For each edge $A$, consider the event $E_A$ that $A$ is monochrome. 
+									Then 2-colorability of $H$ is equivalent the case that none of the events 
+									$E_A$ occur, i.e., the event $\cap_{A\in H} E_A^c$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Now note that $\mathbb{P}(E_A) = \dfrac{2}{2^k} = \dfrac{1}{2^{k-1}}$.
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							2-colorability of Hypergraphs
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Now, $E_A$ is independent from $E_B$ iff $A \cap B = \varnothing$. 
+									Since edge $A$ contains $k$ vertices, each of which is contained in 
+									$(k-1)$ other edges, we obtain an upper bound for the dependence degree 
+									as $|\{B \in H | A \cap B \neq \varnothing\}| \leqslant (k-1)k$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Thus, if $$\dfrac{k(k-1)+1}{2^{k-1}} \leqslant \dfrac{1}{e},$$ we can guarantee 
+									that $\mathbb{P}\left(\cap_{A\in H} E_A^c\right) > 0$, thanks to LLL.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									One can show that for $k \geqslant 9$, the above inequality holds good.
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm; margin-top: 0.8cm;">
+							Vertex Colouring
+						</h2>
+
+						<blockquote class="fragment" style="width: auto;">
+							Let $G$ be a graph with degree at most $\Delta$. 
+							Let $X_v$ be the random variable that represents the 
+							color of the vertex $v$. Let $X_v$ be a independent and uniformly
+							chosen over the set $\{1, . . . , C\}$. What will be a lower bound on $C$?
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									For every edge $e$, we define our bad event $A_e$ that is 
+									the indicator variable for both its vertices receiving identical
+									colour.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Since the colouring done uniformly at random, so $\mathbb{P}(A_e) = \frac{1}{C}$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Note that the event $A_e$ does not depend on any 
+									other event $A_f$, if the edges $e$ and $f$ do not share a common vertex. 
+									So, the event $A_e$ depends on at most $2(\Delta - 1)$ other bad events.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Thus, by LLL, a good event, i.e. a feasible colouring is possible if 
+									$$\dfrac{1}{C}\big[2(\Delta - 1) + 1\big] \leqslant \dfrac{1}{e}\quad\Longleftrightarrow\quad C\geqslant e\big[2(\Delta - 1) + 1\big]$$
+								</li>
+							</ul>
+						</div>	
+					</section>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;">
                     <h3>
-                        Why t-SNE ?
+                        Asymmetric LLL revisited
                     </h3>
-                    
                     <div>
-						<ul>
-							<li class="fragment">
-								t-SNE has a huge scope of applicability in the field of biomedical and genetic research where researchers often encounter microarray-type datasets.
-								Due to a very high number of features, these sort of datasets are nearly impossible to visualize. t-SNE is one of the possible
-								methods which helps us in this regard.
-							</li>
-						</ul>
+						For the sake of notational convenience, we are stating the asymmetric LLL with slightly different notations.
 					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								t-SNE is often employed in the field of cluster analysis where the local cluster structures
-								can be visualized quite well using t-SNE.
-							</li>
-						</ul>
-					</div>
+                    <blockquote style="width: auto; margin-top: 0.6cm;">
+						Let $\mathcal{A}$ be a finite set of events in a probability space $\Omega$. For $A \in \mathcal{A}$ let $\Gamma(A)$ be a subset of $\mathcal{A}$ satisfying that $A$ is independent from the collection of events $\mathcal{A} \backslash(\{A\} \cup \Gamma(A))$. If there exists an assignment of reals $x: \mathcal{A} \rightarrow(0,1)$ such that:
+$$
+\forall A \in \mathcal{A}: \mathbb{P}(A) \leq x(A) \prod_{B \in \Gamma(A)}(1-x(B)),
+$$
+then the probability of avoiding all events in $\mathcal{A}$ is at least $\prod_{A \in \mathcal{A}}(1-x(A))$, in particular it is positive.
+					</blockquote>
                 </section>
 
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3 style="font-size: 50px;">
-                        Notations and Objective
-                    </h3>
-                    
-                    <div>
-						<ul>
-							<li class="fragment">
-								Suppose we have a dataset $\mathcal{X}$ with $n$ datapoints, say $X_1$, $X_2$, $\cdots$, $X_n$. Each $X_i$ has $d$ many features, i.e. $X_i \in \mathbb{R}^d$, where $d$ is large.
-							</li>
-						</ul>
-					</div>
 
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Often times, it is believed that the datapoints are lying on a lower-dimensional <em>manifold</em>. We wish to find out such a lower-dimensional embedding or mapping of $\mathcal{X}$, say $\mathcal{Y}$, where each $X_i$ maps to $Y_i$ in the low-dimensional space for $i = 1, 2, \cdots, n$.
-							</li>
-						</ul>
-					</div>
+				
 
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								The embedding is expected to locally preserve the distances among each pair of points. So, in case some $X_i$ and $X_j$ are near each other in the actual dataset, their embeddings $Y_i$ and $Y_j$ are expected to lie in close proximity as well.
-							</li>
-						</ul>
-					</div>
-                </section>
 
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 25px;" data-auto-animate
 				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
                     <h3 data-id="heading-sne" style="font-size: 50px;">
-                        Stochastic Neighbour Embedding
-                    </h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								The concept of <strong>Stochastic Neighbour Embedding (SNE)</strong> was introduced by Hinton and Roweis in their paper with the same title, published in NIPS (Neural Information Processing Systems), 2002.<br>
-							</li>
-						</ul>
-					</div>
-
-                    <div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								SNE starts by converting the high-dimensional Euclidean distances between datapoints into conditional probabilities that represent similarities.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
-				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
-                    <h3 data-id="heading-sne" style="font-size: 50px;">
-                        Stochastic Neighbour Embedding
-                    </h3>
-
-					<div style="margin-top: 0.6cm;">
-						We shall be considering the following notations:
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								The conditional probability $p_{j|i}$ is defined to be the similarity of $X_j$ to $X_i$, i.e. the probability that $X_i$ would pick $X_j$ as its "neighbour" if neighbours were picked in proportion to their probability density under a normal density centered at $X_i$.<br>
-							</li>
-						</ul>
-					</div>
-
-                    <div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								For the low-dimensional counterparts $Y_i$ and $Y_j$ of $X_i$ and $X_j$, it is possible to compute an analogous conditional probability, which we shall denote by $q_{j|i}$.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
-				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
-                    <h3 data-id="heading-sne" style="font-size: 50px;">
-                        Stochastic Neighbour Embedding
-                    </h3>
-
-					<div style="margin-top: 0.6cm;">
-						Let us summarize the contents of the last slide:
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								For each $X_i$, define : $$p_{j|i} ~\propto~ \exp\left(-\frac{||X_i - X_j||^2}{2\sigma_i^2}\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
-							</li>
-
-							<li class="fragment">
-								Similarly, for the low-dimensional counterpart $Y_i$, define : $$q_{j|i} ~\propto~ \exp\left(-||Y_i - Y_j||^2\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
-				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
-                    <h3 data-id="heading-sne" style="font-size: 50px;">
-                        Stochastic Neighbour Embedding
+                        Moser-Tardos Algorithm for LLL
 					</h3>
 
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								For each $X_i$, define : $$p_{j|i} ~\propto~ \exp\left(-\frac{||X_i - X_j||^2}{2\sigma_i^2}\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
-							</li>
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Previous Algorithmic Approaches
+						</h2>
 
-							<li class="fragment">
-								Similarly, for the low-dimensional counterpart $Y_i$, define : $$q_{j|i} ~\propto~ \exp\left(-||Y_i - Y_j||^2\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
-							</li>
-						</ul>
-					</div>
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-bottom: 0.2cm;">
+									<strong>Beck (1991):</strong> If in a hypergraph, every edge contains at least $k$ vertices and shares common vertices with no more than roughly $2^{\frac{k}{48}}$ other edges, then a polytime algorithm can 2-color the vertices without producing a monochromatic edge.
+								</li>
+	
+								<li class="fragment" style="margin-bottom: 0.2cm;">
+									<strong>Alon (1991):</strong> Improved Beck's threshold to $2^{\frac{k}{8}}$ edges using a simple and randomized variant of Beck's algorithm .
+								</li>
+	
+								<li class="fragment" style="margin-bottom: 0.2cm;">
+									<strong>Czumay and Scheideler (2000):</strong> Extended known algorithmic versions to general cases where the edges of the hypergraph in question need not be uniform.
+								</li>
+	
+								<li class="fragment" style="margin-bottom: 0.2cm;">
+									<strong>Srinivasan (2008):</strong> Improved Alon's threshold to $2^{\frac{k}{4}}$ edges along with a series of other improvements.
+								</li>
+	
+								<li class="fragment" style="margin-bottom: 0.2cm;">
+									<strong>Moser (2009):</strong> Improved Srinivasan's threshold to $\frac{2^{k}}{32}$ edges.
+								</li>
+							</ul>
+						</div>						
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 22px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Sequential Solver)
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li style="margin-bottom: 0.2cm;">
+									The authors only consider events determined by different subsets of mutually independent random variables.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									Let $\mathcal{P}$ be a finite collection of mutually independent random variables defined on a fixed probability space $\Omega$.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									We shall consider events $A$ that are determined by the values of some $S\subseteq\mathcal{P}$ of these variables. Let $\mathcal{A}$ denote the finite family of events in $\Omega$ determined by $\mathcal{P}.$
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									In such a case, we say that an evaluation of the variables in $S$ \emph{violates} $A$ if it makes $A$ happen.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									If $\mathcal{A}$ is determined by $\mathcal{P},$ then $\exists$ a minimal subset that completely determines $A$ $\in$ $\mathcal{A}.$ We denote this set of variables by vbl$(A)$.
+								</li>
+
+								<li style="margin-bottom: 0.2cm;">
+									We define <em>dependency graph</em> $\mathcal{G}_{\mathcal{A}}$ for $\mathcal{A}$ as a graph with vertex set $\mathcal{A}$ and edge set:
+      $$\mathcal{E} = \{(A,B):A\neq B \text{ but } \text{vbl}(A)\cap\text{vbl}(B)\neq\Phi\}$$ 
+								</li>
+
+								<li style="margin-bottom: 0.2cm;">
+									We further define $\Gamma_{\mathcal{A}}(A)$ to be the neighbourhood of $A$ in $\mathcal{G}.$
+								</li>
+							</ul>
+						</div>						
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 22px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Sequential Solver)
+						</h2>
+
+						<div class="r-hstack">
+							<img data-src="sp2020/mta-s.jpg" alt="sometext">
+							<br>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Complexity: Moser-Tardos (Sequential Solver)
+						</h2>
+
+						<blockquote style="width: auto;">
+							Consider the setup of the <strong>asymmetric LLL</strong>. If the LLL conditions are satisfied for $\mathcal{A},$ then $\exists$ an assignment of the variables in $\mathcal{P}$ not violating $\mathcal{A}.$ Further the expected total number of resampling steps before termination is at most $$\sum_{A\in\mathcal{A}}\frac{x(A)}{1-x(A)}$$
+						</blockquote>
+					</section>
+
+
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Parallelized Variant)
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li style="margin-bottom: 0.5cm;">
+									We start with the evaluation of the variables at a random point in $\Omega,$ then in every step we select a maximal independent set $\mathcal{T}$ in the subgraph of the dependency graph spanned by all the violated events.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									We then resample the variables associated with $T$ parallelly, i.e., we resample $\bigcup_{A\in\mathcal{A}}\text{vbl}(A)$ while keeping the variables in $\mathcal{P}\setminus\bigcup_{A\in\mathcal{A}}\text{vbl}(A)$ fixed.
+								</li>
+							</ul>
+						</div>						
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 22px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Parallelized Variant)
+						</h2>
+
+						<div class="r-hstack">
+							<img data-src="sp2020/mta-p.jpg" alt="sometext">
+							<br>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Complexity: Moser-Tardos (Parallelized Variant)
+						</h2>
+
+						<blockquote style="width: auto;">
+							Consider the setup of the asymmetric LLL. We tweak the LLL assumptions slightly as follows:<br><br>
+  Suppose $\epsilon>0$ and $\exists$ an assignment $x:\mathcal{A}\rightarrow(0,1)$ such that:
+  $$\forall A \in \mathcal{A}:\hspace{3mm}\mathbb{P}(A)\leq(1-\epsilon)x(A)\prod_{B\in\Gamma_{\mathcal{A}}(A)}(1-x(B)).$$
+  Then the parallel version of the algorithm performs an expected $\mathcal{O}(\frac{1}{\epsilon}\log\sum_{A\in\mathcal{A}}\frac{x(A)}{1-x(A)})$ number of resampling steps before termination.
+						</blockquote>
+					</section>
                 </section>
 
 
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
-				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
-                    <h3 data-id="heading-sne" style="font-size: 50px;">
-                        Stochastic Neighbour Embedding
-					</h3>
 
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Note that the $\sigma_i$’s are chosen such that, for each datapoint , the ball centered at $X_i$ of radius $\sigma_i$ contains approximately same number of other datapoints. This is obtained through fixing the perplexity of the Gaussian distributions to a fixed quantity.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Any particular value of $\sigma_i$ induces a probability distribution, say $P_i$, over the complete set of datapoints.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
-				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
-                    <h3 data-id="heading-sne" style="font-size: 50px;">
-                        Stochastic Neighbour Embedding
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Perplexity is defined as :
-								$$\text{Perp}(P_i) = 2^{H(P_i)} = 2^{-\sum_j p_{j|i} \log_2 (p_{j|i})}$$ where $H(X_i)$ is the Shannon Entropy for the distribution $P_i$.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								The perplexity can be interpreted as a measure of the effective number of neighbours. The performance of SNE is fairly robust to changes in the perplexity, and its values typically lie in between $5$ and $50$.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
-                    <h3 data-id="heading-comparison" style="font-size: 50px;">
-                        Comparison of $\mathcal{X}$ and $\mathcal{Y}$ in SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In case the low-dimensional embedding $Y_i$ of $X_i$ is appropriate, we expect that ideally $p_{j|i}$ should be same as $q_{j|i}$ for all $j = 1, 2, \cdots, n$. So, if we denote $P_i = (p_{1|i}, \cdots, p_{n|i})$ and $Q_i = (q_{1|i}, \cdots, q_{n|i})$, then for a perfect embedding we shouldhave $P_i \approx Q_i$.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								However, that doesn't always happen. So, the authors decided to minimize the Kullback-Leibler Divergence between $P_i$ and $Q_i$ for each $X_i$.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
-				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)" data-transition="convex">
-                    <h3 data-id="heading-comparison" style="font-size: 50px;">
-                        Comparison of $\mathcal{X}$ and $\mathcal{Y}$ in SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In SNE, our objective is to minimize $$C = \sum_{i = 1}^n \text{KL}(P_i || Q_i) = \sum_{i=1}^n \sum_{j=1}^n p_{j|i} \log\left(\dfrac{p_{j|i}}{q_{j|i}}\right)$$ with respect to all the points $Y_i$ in the embedding.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								We minimize the cost function using some gradient descent technique, e.g. Newton-Raphson algorithm. The gradient for the $i$-th embedded point $Y_i$ is : $$\dfrac{\partial C}{\partial Y_i} = 2\sum_{j \neq i} (p_{j|i} - q_{j|i} + p_{i|j} - q_{i|j})(Y_i - Y_j)$$
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3 id="heading-iter-sne" style="font-size: 50px;">
-                        Iterations for SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Mathematically, the gradient update with a momentum term is given by : $$\mathcal{Y}^{(t)} = \mathcal{Y}^{(t-1)} + \eta\cdot\dfrac{\partial C}{\partial \mathcal{Y}^{(t-1)}} + \alpha(t)\cdot\big(\mathcal{Y}^{(t-1)} - \mathcal{Y}^{(t-2)}\big)$$ where $\mathcal{Y}^{(t)}$ indicates the solution using SNE at iteration $t$, $\eta$ indicates the learning rate, and $\alpha(t)$ represents the momentum at iteration $t$.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								These iterations are continued until we meet some convergence criterion on $\mathcal{Y}^{(t)}$.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3 style="font-size: 50px;">
-                        Crowding Problem
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Note that a higher dimension can accomodate more points at small distances, as compared to a lower dimension. For example, in 1D, only two points can be equidistant from a fixed point. But, in 2D, there exist infinitely many points (viz. a circle) that are are equidistant from that point.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In case of SNE, since we try to minimize each $\text{KL}(P_i||Q_i)$, so all such points would try to remain as close as possible in the lower-dimensional embedded space, which might create very dense clusters in the visualization. This is never desirable since we shall be losing information on the shapes of the clusters in data.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
-                    <h3 data-id="Hello" style="font-size: 50px;">
-                        Symmetric SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								The crowding problem can be avoided in most cases if we model the $p_{ij}$'s jointly, instead of considering the conditional probabilities $p_{j|i}$. We consider $$p_{ij} \propto \exp\left(-\frac{||X_i - X_j||^2}{2\sigma_i^2}\right)$$
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In that case, the concerned gradient becomes $$\dfrac{\partial C}{\partial Y_i} = 4\sum_{j \neq i} (p_{ij}- q_{ij})(Y_i - Y_j)$$
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
-                    <h3 data-id="Hello" style="font-size: 50px;">
-                        Symmetric SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In case $X_k$ is an outlier, note that all of the distances $||X_1-X_k||$, $||X_2-X_k||$, $\cdots$, $||X_n-X_k||$ should be very large. Thus, $p_{k1}, p_{k2}, \cdots, p_{kn}$ should be pretty small, and the contribution of $X_k$ in $C$ will be negligible.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In such a situation, we may consider $p_{ij} = \dfrac{1}{2n}\big(p_{j|i} + p_{i|j}\big)$.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Note that $\sum_j p_{ij} > \frac{1}{2n}$, i.e. each datapoint $X_i$ makes at least a significant contribution to the cost function $C$. This might help us in overcoming the outlier problem.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
-                    <h3 data-id="tsne" style="font-size: 50px;">
-                        Introduction to t-SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In the high-dimensional space, we convert distances into probabilities using a normal distribution. In the low-dimensional map, we can use a probability distribution that has much heavier tails than a Gaussian to convert distances into probabilities. This allows a moderate distance in the high-dimensional space to be faithfully modelled by a much larger distance in the map.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								One such choice of heavy-tailed distribution might be a $t$-distribution with $1$ degree of freedom (i.e. a Cauchy distribution).
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
-                    <h3 data-id="tsne" style="font-size: 50px;">
-                        Introduction to t-SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Following the last slide, let us consider $q_{ij} \propto \dfrac{1}{1+||Y_i - Y_j||^2}$.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In that case, the concerned gradient becomes $$\dfrac{\partial C}{\partial Y_i} = 4\sum_{j \neq i} (p_{ij}- q_{ij})(1+||Y_i - Y_j||^2)^{-1}(Y_i - Y_j)$$
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3 id="heading-iter-sne" style="font-size: 50px;">
-                        Iterations for t-SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Mathematically, the gradient update with a momentum term is given by : $$\mathcal{Y}^{(t)} = \mathcal{Y}^{(t-1)} + \eta\cdot\dfrac{\partial C}{\partial \mathcal{Y}^{(t-1)}} + \alpha(t)\cdot\big(\mathcal{Y}^{(t-1)} - \mathcal{Y}^{(t-2)}\big)$$ where $\mathcal{Y}^{(t)}$ indicates the solution using t-SNE at iteration $t$, $\eta$ indicates the learning rate, and $\alpha(t)$ represents the momentum at iteration $t$.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								These iterations are continued until we meet some convergence criterion on $\mathcal{Y}^{(t)}$.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3 id="appl" style="font-size: 50px;">
-                        Visualization of Datasets using t-SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								A large class of real as well as simulated datasets can be visualized pretty well in 2D using t-SNE. 
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In the next few slides, we shall see some 2D embeddings of some high-dimensional datasets, made using some different techniques including t-SNE, Sammon Mapping, Isomap, LLE etc.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left;">
-                    <h3 style="font-size: 40px;">
-                        Olivetti Faces Dataset
-					</h3>
-                    <hr>
-					<div class="r-stack">
-						<img data-src="sp2020/img2-all.jpg" alt="sometext" width="625" height="575">
-						<br>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left;">
-                    <h3 style="font-size: 40px;">
-                        COIL-20 Dataset
-					</h3>
-                    <hr>
-					<div class="r-hstack">
-						<img data-src="sp2020/img3-all.jpg" alt="sometext" width="625" height="525">
-						<br>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3 style="font-size: 50px;">
-                        Performance of t-SNE
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								In both of the aforementioned examples, we can clearly observe that the embeddings using t-SNE carries much more meaningful information about the clusters in the original data.
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								We can see some crowding issues in case of the other methods such as Isomap, Sammon Mapping etc. However, t-SNE has not faced this issue, thanks to the corrections that have been employed beforehand (discussed earlier).
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
-                    <h3 style="font-size: 50px;">
-                        Drawbacks
-					</h3>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								For each iteration, the runtime complexity of t-SNE is $\mathcal{O}(n^2)$. This is reasonable for datasets with small or moderate number of datapoints. Nevertheless, for very large datasets, the necessary computations for t-SNE might take a lot of time which is impratical.  
-							</li>
-						</ul>
-					</div>
-
-					<div style="margin-top: 0.6cm;">
-						<ul>
-							<li class="fragment">
-								Due to its unsupervised nature, t-SNE can't be employed as a classification method. Consequently, whenever we get some new datapoints, all the computations are needed to be performed from the beginning which, again, might be very time-consuming.
-							</li>
-						</ul>
-					</div>
-                </section>
-
-
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;">
 					<div style="margin-top: 0.6cm; text-align: center; font-size: 50pt;">
 						<strong>Thank you</strong>
 					</div>
