@@ -4,7 +4,7 @@
 
         <title>Lovász Local Lemma & its Applications</title>
 
-        <meta name="description" content="SP2020">
+        <meta name="description" content="Presentation for Random Graphs">
         <meta name="author" content="JRC">
 
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +25,7 @@
     <body>
         <div class="reveal">
             <div class="slides">
-                <section data-background="sp2020/network.gif" data-background-opacity=0.12 style="font-size: 33px;" data-auto-animate
+                <section data-background="sp2020/network.gif" data-background-opacity=0.15 style="font-size: 33px;" data-auto-animate
 				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
                     <h3 id="heading" style="color: white; text-align: center; margin-bottom: 0.8cm; font-size: 60px;">
                         <b>Lovász Local Lemma & its Applications</b>
@@ -120,11 +120,12 @@
 									probabilities are bounded above by some $p < 1$, then we shall have:
 									$$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) 
 									= 1 - \mathbb{P}\left(\bigcup_{i = 1}^n E_i\right)
-									= 1 - \prod_{i = 1}^n \mathbb{P}(E_i)
-									> 1 - p^n > 0$$
+									= 1 - \sum_{i = 1}^n \mathbb{P}(E_i)
+									\geqslant 1 - 1 \geqslant 0$$
 								</li>
 								<li>
-									In that case, we can guarantee the occurence of a good event, with positive probability.
+									In that case, we can say the occurence of a good event may (or may not) be possible. In fact, if 
+									the bad events are not exhaustive, occurence of a good event is guaranteed with positive probability.
 								</li>
 							</ul>
 						</div>
@@ -209,7 +210,7 @@
                     </h3>
 
 					<div style="margin-top: 0.6cm;">
-						<blockquote style="width: auto; margin-bottom: 1cm;">
+						<blockquote style="width: auto; margin-bottom: 1cm; margin-top: 1.5cm;">
 							An event $A$ in an arbitrary probability space is <strong>mutually independent</strong>
 							of a set $\mathscr{B}$ of some other events, if for every $S \in \mathscr{B}$, we have
 							$$\mathbb{P}\left(A~\bigg\vert \bigcap_{B \in S} B\right) = \mathbb{P}(A)$$
@@ -226,7 +227,7 @@
 
 				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 27px;" data-auto-animate
 				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
-                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                    <h3 data-id="heading-sne" style="font-size: 50px; margin-bottom: 1cm;">
                         Symmetric Lovász Local Lemma
                     </h3>
 
@@ -246,7 +247,7 @@
 								</li>
 
 								<li style="margin-bottom: 0.5cm;">
-									$p(d+1) > \frac{1}{e}$
+									$p(d+1) \leqslant \frac{1}{e}$
 								</li>
 							</ul>
 							then we shall have: 
@@ -257,7 +258,7 @@
 
 
 				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 27px;">
-                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                    <h3 data-id="heading-sne" style="font-size: 50px; margin-bottom: 1cm;">
                         Asymmetric Lovász Local Lemma
                     </h3>
 
@@ -290,9 +291,9 @@
                         Proof of Symmetric LLL
 					</h3>
 
-					<div style="margin-top: 0.6cm;">
+					<div style="margin-top: 0.8cm;">
 						<ul>
-							<li style="margin-bottom: 0.2cm;">
+							<li style="margin-bottom: 0.4cm;">
 								If $d = 0$, then all the $E_i$'s are independent, and symmetric LLL holds.
 							</li>
 
@@ -301,8 +302,8 @@
 							</li>
 
 							<li style="margin-bottom: 0.2cm;">
-								We shall be using the fact that for all $x\geqslant 0$, 
-								$\left(1-\frac{1}{x+1}\right)^x \geqslant \frac{1}{e} \cdot$
+								We shall be using the fact that for all $x\geqslant 0$, we have 
+								$\left(1-\dfrac{1}{x+1}\right)^x \geqslant \frac{1}{e} \cdot$
 							</li>
 
 							<li style="margin-bottom: 0.2cm;">
@@ -358,24 +359,24 @@
 
 						<div style="margin-top: 0.6cm;">
 							<ul>
-								<li class="fragment" style="margin-top: 0.2cm;">
-									Whether a given pair (a, b) of points is chosen depends only on what 
+								<li class="fragment" style="margin-top: 0.4cm;">
+									Whether a given pair $(a, b)$ of points is chosen depends only on what 
 									happens in the colors of a and b, and not at all on whether any other 
-									collection of points in the other n − 2 colors are chosen. This implies 
-									the event "a and b are both chosen" is dependent only on those pairs of 
-									adjacent points which share a color either with a or with b.
+									collection of points in the other $(n − 2)$ colors are chosen. This implies 
+									the event "$a$ and $b$ are both chosen" is dependent only on those pairs of 
+									adjacent points which share a color either with $a$ or with $b$.
 								</li>
 
-								<li class="fragment" style="margin-top: 0.2cm;">
-									There are 11 points on the circle sharing a color with a (including a 
+								<li class="fragment" style="margin-top: 0.4cm;">
+									There are $11$ points on the circle sharing a color with $a$ (including $a$ 
 									itself), each of which is involved with 2 pairs. This means there are 
-									21 pairs other than (a, b) which include the same color as a, and the 
-									same holds true for b. The worst that can happen is that these two sets
-									 are disjoint, so we can take d = 42 in the lemma. This gives $ep(d+1) \approx 0.966 
+									$21$ pairs other than $(a, b)$ which include the same color as a, and the 
+									same holds true for $b$. The worst that can happen is that these two sets
+									 are disjoint, so we can take $d = 42$ in the lemma. This gives $ep(d+1) \approx 0.966 
 									 < 1$.
 								</li>
 
-								<li class="fragment" style="margin-top: 0.2cm;">
+								<li class="fragment" style="margin-top: 0.4cm;">
 									By LLL, there is a positive probability that none of the bad events occur, 
 									meaning that our set contains no pair of adjacent points. This implies that a set 
 									satisfying our conditions must exist.
@@ -428,12 +429,12 @@
 									as $|\{B \in H | A \cap B \neq \varnothing\}| \leqslant (k-1)k$.
 								</li>
 
-								<li class="fragment" style="margin-top: 0.2cm;">
+								<li class="fragment" style="margin-top: 0.4cm;">
 									Thus, if $$\dfrac{k(k-1)+1}{2^{k-1}} \leqslant \dfrac{1}{e},$$ we can guarantee 
-									that $\mathbb{P}\left(\cap_{A\in H} E_A^c\right) > 0$, thanks to LLL.
+									that $\mathbb{P}\left(\bigcap_{A\in H} E^c_A\right) > 0$, thanks to LLL.
 								</li>
 
-								<li class="fragment" style="margin-top: 0.2cm;">
+								<li class="fragment" style="margin-top: 0.5cm;">
 									One can show that for $k \geqslant 9$, the above inequality holds good.
 								</li>
 							</ul>
@@ -480,7 +481,7 @@
                 </section>
 
 
-				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;">
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 26px;">
                     <h3>
                         Asymmetric LLL revisited
                     </h3>
@@ -506,30 +507,30 @@ then the probability of avoiding all events in $\mathcal{A}$ is at least $\prod_
                         Moser-Tardos Algorithm for LLL
 					</h3>
 
-					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;">
 						<h2 style="font-size: 35px; margin-bottom: 1cm;">
 							Previous Algorithmic Approaches
 						</h2>
 
 						<div style="margin-top: 0.6cm;">
 							<ul>
-								<li class="fragment" style="margin-bottom: 0.2cm;">
+								<li style="margin-bottom: 0.2cm;">
 									<strong>Beck (1991):</strong> If in a hypergraph, every edge contains at least $k$ vertices and shares common vertices with no more than roughly $2^{\frac{k}{48}}$ other edges, then a polytime algorithm can 2-color the vertices without producing a monochromatic edge.
 								</li>
 	
-								<li class="fragment" style="margin-bottom: 0.2cm;">
+								<li style="margin-bottom: 0.2cm;">
 									<strong>Alon (1991):</strong> Improved Beck's threshold to $2^{\frac{k}{8}}$ edges using a simple and randomized variant of Beck's algorithm .
 								</li>
 	
-								<li class="fragment" style="margin-bottom: 0.2cm;">
+								<li style="margin-bottom: 0.2cm;">
 									<strong>Czumay and Scheideler (2000):</strong> Extended known algorithmic versions to general cases where the edges of the hypergraph in question need not be uniform.
 								</li>
 	
-								<li class="fragment" style="margin-bottom: 0.2cm;">
+								<li style="margin-bottom: 0.2cm;">
 									<strong>Srinivasan (2008):</strong> Improved Alon's threshold to $2^{\frac{k}{4}}$ edges along with a series of other improvements.
 								</li>
 	
-								<li class="fragment" style="margin-bottom: 0.2cm;">
+								<li style="margin-bottom: 0.2cm;">
 									<strong>Moser (2009):</strong> Improved Srinivasan's threshold to $\frac{2^{k}}{32}$ edges.
 								</li>
 							</ul>
@@ -560,7 +561,7 @@ then the probability of avoiding all events in $\mathcal{A}$ is at least $\prod_
 								</li>
 	
 								<li style="margin-bottom: 0.2cm;">
-									If $\mathcal{A}$ is determined by $\mathcal{P},$ then $\exists$ a minimal subset that completely determines $A$ $\in$ $\mathcal{A}.$ We denote this set of variables by vbl$(A)$.
+									If $\mathcal{A}$ is determined by $\mathcal{P},$ then $\exists$ a minimal subset that completely determines $A$ $\in$ $\mathcal{A}.$ We denote this set of variables by $\text{vbl}(A)$.
 								</li>
 
 								<li style="margin-bottom: 0.2cm;">
@@ -598,7 +599,7 @@ then the probability of avoiding all events in $\mathcal{A}$ is at least $\prod_
 
 
 
-					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;">
 						<h2 style="font-size: 35px; margin-bottom: 1cm;">
 							Algorithm: Moser-Tardos (Parallelized Variant)
 						</h2>
@@ -636,7 +637,7 @@ then the probability of avoiding all events in $\mathcal{A}$ is at least $\prod_
 							Consider the setup of the asymmetric LLL. We tweak the LLL assumptions slightly as follows:<br><br>
   Suppose $\epsilon>0$ and $\exists$ an assignment $x:\mathcal{A}\rightarrow(0,1)$ such that:
   $$\forall A \in \mathcal{A}:\hspace{3mm}\mathbb{P}(A)\leq(1-\epsilon)x(A)\prod_{B\in\Gamma_{\mathcal{A}}(A)}(1-x(B)).$$
-  Then the parallel version of the algorithm performs an expected $\mathcal{O}(\frac{1}{\epsilon}\log\sum_{A\in\mathcal{A}}\frac{x(A)}{1-x(A)})$ number of resampling steps before termination.
+  Then the parallel version of the algorithm performs an expected $\mathcal{O}\left(\frac{1}{\epsilon}\log\sum_{A\in\mathcal{A}}\frac{x(A)}{1-x(A)}\right)$ number of resampling steps before termination.
 						</blockquote>
 					</section>
                 </section>
