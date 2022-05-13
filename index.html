@@ -327,6 +327,44 @@
                         Some Applications of LLL
 					</h3>
 
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm; margin-top: 0.8cm;">
+							Vertex Colouring
+						</h2>
+
+						<blockquote style="width: auto;">
+							Let $G$ be a graph with degree at most $\Delta$. 
+							Let $X_v$ be the random variable that represents the 
+							color of the vertex $v$. Let $X_v$ be a independent and uniformly
+							chosen over the set $\{1, . . . , C\}$. What will be a lower bound on $C$?
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									For every edge $e$, we define our bad event $A_e$ that is 
+									the indicator variable for both its vertices receiving identical
+									colour.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Since the colouring done uniformly at random, so $\mathbb{P}(A_e) = \frac{1}{C}$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Note that the event $A_e$ does not depend on any 
+									other event $A_f$, if the edges $e$ and $f$ do not share a common vertex. 
+									So, the event $A_e$ depends on at most $2(\Delta - 1)$ other bad events.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Thus, by LLL, a good event, i.e. a feasible colouring is possible if 
+									$$\dfrac{1}{C}\big[2(\Delta - 1) + 1\big] \leqslant \dfrac{1}{e}\quad\Longleftrightarrow\quad C\geqslant e\big[2(\Delta - 1) + 1\big]$$
+								</li>
+							</ul>
+						</div>	
+					</section>
+
 					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
 						<h2 style="font-size: 35px; margin-bottom: 1cm;">
 							Positioning of Crystal Beads
