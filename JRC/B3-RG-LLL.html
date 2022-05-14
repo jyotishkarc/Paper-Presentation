@@ -1,0 +1,750 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>Lovász Local Lemma & its Applications</title>
+
+        <meta name="description" content="Presentation for Random Graphs">
+        <meta name="author" content="JRC">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/night.css" id="theme">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+        <link href="css/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+        <link href="css/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-background="sp2020/network.gif" data-background-opacity=0.15 style="font-size: 33px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 id="heading" style="color: white; text-align: center; margin-bottom: 0.8cm; font-size: 60px;">
+                        <b>Lovász Local Lemma & its Applications</b>
+                    </h3>
+                    <hr>
+                    <div style="text-align: center; margin-top: 0.6cm;">
+                        A presentation by:
+                        <br>
+					</div>
+					<div style="text-align: center; margin-top: 0.5cm;">
+                        <strong>Jyotishka Ray Choudhury (BS1903)</strong>
+						<br>
+						<strong>Soutim Das (BS1910)</strong>
+                        <br>
+                    </div>
+					<div style="text-align: center; margin-top: 0.5cm; margin-bottom: 0.7cm;" data-auto-animate>
+						B.Stat 3rd Year<br>
+						Indian Statistical Institute, Kolkata
+					</div>
+					<hr>
+					<div style="text-align: center; margin-top: 0.8cm;" data-auto-animate>
+						<em>Presentation for <strong>Random Graphs</strong></em>
+                        <br>
+					</div>
+					<div style="text-align: center; margin-top: 0.4cm;">
+                        13th May, 2022
+                        <br>
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;" data-auto-animate>
+                    <h3 data-id="intro">
+                        Introduction
+                    </h3>
+
+                    Let $\mathscr{A} = \{A_1, A_2, \cdots, A_n\}$ be a finite set of events in some 
+					arbitrary probability space, say $(\Omega,\mathscr{A},\mathbb{P})$.
+
+					<div style="margin-top: 0.7cm ;">
+						<blockquote style="width: auto;">
+							In probabilistic methods, we often try to show whether an object that satisfies 
+							some desired property exists or not, in a finite collection of objects.
+						</blockquote>
+					</div>
+
+					<div class="fragment" style="margin-top: 0.7cm ;">
+							Naturally, if such an object exists, there should be a positive probability that 
+							a randomly chosen object from the collection will satisfy the desired property. 
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;" data-auto-animate="">
+                    <h3 data-id="intro">
+                        Introduction
+                    </h3>
+                    
+                    <div>
+						<ul>
+							<li class="fragment">
+								In a probability space $(\Omega,\mathscr{A},\mathbb{P})$, let $E = \{E_1, E_2, \cdots, E_n\}$
+								be the set of all "bad" events, i.e. the events whose occurence is not desirable. Naturally, we shall be 
+								interested in the occurence of an event that does not belong to $E$. We can refer to such an event 
+								as a "good" event.
+							</li>
+
+							<li class="fragment" style="margin-top: 0.5cm;">
+								In order for this to happen, we shall require the condition that 
+								$$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) > 0$$
+							</li>
+
+							<li class="fragment" style="margin-top: 0.5cm;">
+								A very natural question that arises is that <strong>is this always possible?</strong>
+							</li>
+						</ul>
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px; margin-top: 1.7cm;">
+                    <h3 style="font-size: 50px;">
+                        Dependence among events
+                    </h3>
+                    
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Independent bad events
+						</h2>
+
+						<div>
+							<ul>
+								<li>
+									Note that if all the bad events are independent from each other, and their 
+									probabilities are bounded above by some $p < 1$, then we shall have:
+									$$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) 
+									= 1 - \mathbb{P}\left(\bigcup_{i = 1}^n E_i\right)
+									= 1 - \sum_{i = 1}^n \mathbb{P}(E_i)
+									\geqslant 1 - 1 \geqslant 0$$
+								</li>
+								<li>
+									In that case, we can say the occurence of a good event may (or may not) be possible. In fact, if 
+									the bad events are not exhaustive, occurence of a good event is guaranteed with positive probability.
+								</li>
+							</ul>
+						</div>
+					</section>
+					
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Completely disjoint bad events
+						</h2>
+
+						<div>
+							<ul>
+								<li>
+									If all the $E_i$'s are disjoint, and they collectively span the whole 
+									$\Omega$, i.e. if $E_1 \cup \cdots \cup E_n = \Omega$, then we shall have: 
+									$$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) 
+									= 1 - \mathbb{P}\left(\bigcup_{i = 1}^n E_i\right)
+									= 1 - 1 = 0$$
+								</li>
+								<li>
+									In that case, we can see that a good event is impossible to occur.
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 33px; margin-bottom: 1cm;">
+							But what if the bad events have restricted dependence?
+						</h2>
+
+						<div>
+							<ul>
+								<li class="fragment fade-in-then-out">
+									If it somehow happens that the bad events have some limited dependent structure,
+									i.e. if all the $E_i$'s are dependent upon at most $d$ many $E_j$'s, the union bound 
+									fails to deliver a fruitful result, since $$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) 
+									= 1 - \mathbb{P}\left(\bigcup_{i = 1}^n E_i\right)
+									\geqslant 1 - \sum_{i = 1}^n \mathbb{P}(E_i)$$ and if the last sum is greater than $1$ 
+									(which is very much possible if the $E_i$'s have large overlaps), 
+									the probability statement that we can make is redundant.
+								</li>
+							</ul>
+						</div>	
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 33px; margin-bottom: 1cm;">
+							But what if the bad events have restricted dependence?
+						</h2>
+
+						<div>
+							<blockquote style="width: auto; margin-bottom: 0.8cm;">
+								<ul>
+									<li>
+										In adverse situations like this, the <b>Lovász Local Lemma</b> comes as a saviour.
+									</li>
+
+									<li style="margin-top: 0.5cm; margin-bottom: 0.5cm;">
+										Under some restricted dependence among the bad events, Lovász Local Lemma 
+										ensures that a good event will occur with positive probability.
+									</li>
+								</ul>
+							</blockquote>
+							<hr>
+
+							<div class="fragment" style="margin-top: 0.8cm;">
+								We shall be discussing two versions of the Lovász Local Lemma, viz.
+								<ul>
+									<li style="margin-top: 0.3cm;"><b>Symmetric Lovász Local Lemma</b></li>
+									<li style="margin-top: 0.3cm;"><b>Asymmetric / General Lovász Local Lemma</b></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+                </section>
+
+				
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Mutual Independence
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						<blockquote style="width: auto; margin-bottom: 1cm; margin-top: 1.5cm;">
+							An event $A$ in an arbitrary probability space is <strong>mutually independent</strong>
+							of a set $\mathscr{B}$ of some other events, if for every $S \in \mathscr{B}$, we have
+							$$\mathbb{P}\left(A~\bigg\vert \bigcap_{B \in S} B\right) = \mathbb{P}(A)$$
+						</blockquote>
+
+						This should be noted that an event may be pairwise independent to every event in $\mathscr{B}$,
+						but the events may not be mutually independent.
+					</div>
+
+
+                </section>
+
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 27px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px; margin-bottom: 1cm;">
+                        Symmetric Lovász Local Lemma
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						<blockquote class="fragment" style="width: auto; margin-top: 0.3cm;">
+							Suppose $\mathscr{A} = \{A_1, \cdots, A_n\}$ is a set of events in an 
+							arbitrary probability space. If for all $i = 1,2, \cdots, n$,
+
+							<ul>
+								<li style="margin-bottom: 0.3cm; margin-top: 0.5cm;">
+									$\exists~D_i \subset \mathscr{A}$, with $|D_i| \leqslant d,$ such that 
+									$A_i$ is mutually independent of $\mathscr{A} \setminus D_i$
+								</li>
+
+								<li style="margin-bottom: 0.3cm;">
+									$\mathbb{P}(A_i) \leqslant p$
+								</li>
+
+								<li style="margin-bottom: 0.5cm;">
+									$p(d+1) \leqslant \frac{1}{e}$
+								</li>
+							</ul>
+							then we shall have: 
+							$$\mathbb{P}\left(\bigcap_{i = 1}^n A_i^c\right) > 0$$
+						</blockquote>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 27px;">
+                    <h3 data-id="heading-sne" style="font-size: 50px; margin-bottom: 1cm;">
+                        Asymmetric Lovász Local Lemma
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						<blockquote class="fragment" style="width: auto; margin-top: 0.3cm;">
+							Suppose $\mathscr{A} = \{A_1, \cdots, A_n\}$ is a set of events in an 
+							arbitrary probability space. If for all $i = 1,2, \cdots, n$,
+
+							<ul>
+								<li style="margin-bottom: 0.3cm; margin-top: 0.5cm;">
+									$\exists~D_i \subset \mathscr{A}$, with $|D_i| \leqslant d,$ such that 
+									$A_i$ is mutually independent of $\mathscr{A} \setminus D_i$
+								</li>
+
+								<li style="margin-bottom: 0.3cm;">
+									$\exists~x_i \in [0,1)~$ such that $~\displaystyle\mathbb{P}(A_i) \leqslant 
+									x_i\cdot \prod_{j : A_j \in D_i} \big(1 - x_j\big)$
+								</li>
+							</ul>
+							then we shall have: 
+							$$\mathbb{P}\left(\bigcap_{i = 1}^n A_i^c\right) \geqslant \prod_{i = 1}^n
+							(1 - x_i) > 0$$
+						</blockquote>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 25px;">
+                    <h3 style="font-size: 50px;">
+                        Proof of Symmetric LLL
+					</h3>
+
+					<div style="margin-top: 0.8cm;">
+						<ul>
+							<li style="margin-bottom: 0.4cm;">
+								If $d = 0$, then all the $E_i$'s are independent, and symmetric LLL holds.
+							</li>
+
+							<li style="margin-bottom: 0.2cm;">
+								If $d > 0$, let us put $x_i = \frac{1}{d+1}$, for all $i = 1,2, \cdots, n$.
+							</li>
+
+							<li style="margin-bottom: 0.2cm;">
+								We shall be using the fact that for all $x\geqslant 0$, we have 
+								$\left(1-\dfrac{1}{x+1}\right)^x \geqslant \frac{1}{e} \cdot$
+							</li>
+
+							<li style="margin-bottom: 0.2cm;">
+								Thus, we have, $$x_i \prod_{i = 1}^n \big(1-x_j\big) \geqslant
+								\frac{1}{d+1}\left(1-\frac{1}{d+1}\right)^d \geqslant \frac{1}{e(d+1)} \geqslant
+								p \geqslant \mathbb{P}(A_i)$$
+							</li>
+
+							<li class="fragment" style="margin-bottom: 0.2cm;">
+								Thus, by Asymmetric LLL, $$\mathbb{P}\left(\bigcap_{i = 1}^n E_i^c\right) > 
+								\left(1-\frac{1}{d+1}\right)^n > 0$$
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Some Applications of LLL
+					</h3>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm; margin-top: 0.8cm;">
+							Vertex Colouring
+						</h2>
+
+						<blockquote style="width: auto;">
+							Let $G$ be a graph with degree at most $\Delta$. 
+							Let $X_v$ be the random variable that represents the 
+							color of the vertex $v$. Let $X_v$ be a independent and uniformly
+							chosen over the set $\{1, . . . , C\}$. What will be a lower bound on $C$?
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									For every edge $e$, we define our bad event $A_e$ that is 
+									the indicator variable for both its vertices receiving identical
+									colour.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Since the colouring done uniformly at random, so $\mathbb{P}(A_e) = \frac{1}{C}$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Note that the event $A_e$ does not depend on any 
+									other event $A_f$, if the edges $e$ and $f$ do not share a common vertex. 
+									So, the event $A_e$ depends on at most $2(\Delta - 1)$ other bad events.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Thus, by LLL, a good event, i.e. a feasible colouring is possible if 
+									$$\dfrac{1}{C}\big[2(\Delta - 1) + 1\big] \leqslant \dfrac{1}{e}\quad\Longleftrightarrow\quad C\geqslant e\big[2(\Delta - 1) + 1\big]$$
+								</li>
+							</ul>
+						</div>	
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Positioning of Crystal Beads
+						</h2>
+
+						<blockquote style="width: auto;">
+							Suppose $11n$ points are placed around a circle and colored with $n$ different colors 
+							in such a way that each color is applied to exactly $11$ points. In any such coloring, 
+							there must be a set of $n$ points containing one point of each color but not containing 
+							any pair of adjacent points.	
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment">
+									Imagine picking a point of each color randomly, with all points equally likely 
+									(i.e., having probability $\frac{1}{11}$) to be chosen. The $11n$ different events we want 
+									to avoid correspond to the $11n$ pairs of adjacent points on the circle. For each 
+									pair our odds of picking both points in that pair is at most $\frac{1}{121}$ (exactly $\frac{1}{121}$) 
+									if the two points are of different colors, otherwise $0$), so we will take $p = \frac{1}{121}$.
+								</li>
+							</ul>
+						</div>	
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Positioning of Crystal Beads
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.4cm;">
+									Whether a given pair $(a, b)$ of points is chosen depends only on what 
+									happens in the colors of a and b, and not at all on whether any other 
+									collection of points in the other $(n − 2)$ colors are chosen. This implies 
+									the event "$a$ and $b$ are both chosen" is dependent only on those pairs of 
+									adjacent points which share a color either with $a$ or with $b$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.4cm;">
+									There are $11$ points on the circle sharing a color with $a$ (including $a$ 
+									itself), each of which is involved with 2 pairs. This means there are 
+									$21$ pairs other than $(a, b)$ which include the same color as a, and the 
+									same holds true for $b$. The worst that can happen is that these two sets
+									 are disjoint, so we can take $d = 42$ in the lemma. This gives $ep(d+1) \approx 0.966 
+									 < 1$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.4cm;">
+									By LLL, there is a positive probability that none of the bad events occur, 
+									meaning that our set contains no pair of adjacent points. This implies that a set 
+									satisfying our conditions must exist.
+								</li>
+							</ul>
+						</div>	
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;">
+						<h2 data-id="aaaa" style="font-size: 35px; margin-bottom: 1cm;">
+							2-colorability of Hypergraphs
+						</h2>
+
+						<blockquote style="width: auto;">
+							Suppose $H$ is a $k$-uniform, $k$-regular hypergraph.
+							 What conditions on H will ensure that $H$ is 2-colorable?	
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Let each vertex toss a fair coin.
+									If an outcome is head, we color that vertex red, and blue otherwise.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									For each edge $A$, consider the event $E_A$ that $A$ is monochrome. 
+									Then 2-colorability of $H$ is equivalent the case that none of the events 
+									$E_A$ occur, i.e., the event $\cap_{A\in H} E_A^c$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Now note that $\mathbb{P}(E_A) = \dfrac{2}{2^k} = \dfrac{1}{2^{k-1}}$.
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+						<h2 data-id="aaaa" style="font-size: 35px; margin-bottom: 1cm;">
+							2-colorability of Hypergraphs
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Now, $E_A$ is independent from $E_B$ iff $A \cap B = \varnothing$. 
+									Since edge $A$ contains $k$ vertices, each of which is contained in 
+									$(k-1)$ other edges, we obtain an upper bound for the dependence degree 
+									as $|\{B \in H | A \cap B \neq \varnothing\}| \leqslant (k-1)k$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.4cm;">
+									Thus, if $$\dfrac{k(k-1)+1}{2^{k-1}} \leqslant \dfrac{1}{e},$$ we can guarantee 
+									that $\mathbb{P}\left(\bigcap_{A\in H} E^c_A\right) > 0$, thanks to LLL.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.5cm;">
+									One can show that for $k \geqslant 9$, the above inequality holds good.
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm; margin-top: 0.8cm;">
+							Vertex Colouring
+						</h2>
+
+						<blockquote style="width: auto;">
+							Let $G$ be a graph with degree at most $\Delta$. 
+							Let $X_v$ be the random variable that represents the 
+							color of the vertex $v$. Let $X_v$ be a independent and uniformly
+							chosen over the set $\{1, . . . , C\}$. What will be a lower bound on $C$?
+						</blockquote>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li class="fragment" style="margin-top: 0.2cm;">
+									For every edge $e$, we define our bad event $A_e$ that is 
+									the indicator variable for both its vertices receiving identical
+									colour.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Since the colouring done uniformly at random, so $\mathbb{P}(A_e) = \frac{1}{C}$.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Note that the event $A_e$ does not depend on any 
+									other event $A_f$, if the edges $e$ and $f$ do not share a common vertex. 
+									So, the event $A_e$ depends on at most $2(\Delta - 1)$ other bad events.
+								</li>
+
+								<li class="fragment" style="margin-top: 0.2cm;">
+									Thus, by LLL, a good event, i.e. a feasible colouring is possible if 
+									$$\dfrac{1}{C}\big[2(\Delta - 1) + 1\big] \leqslant \dfrac{1}{e}\quad\Longleftrightarrow\quad C\geqslant e\big[2(\Delta - 1) + 1\big]$$
+								</li>
+							</ul>
+						</div>	
+					</section>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 26px;">
+                    <h3>
+                        Asymmetric LLL revisited
+                    </h3>
+                    <div>
+						For the sake of notational convenience, we are stating the asymmetric LLL with slightly different notations.
+					</div>
+                    <blockquote style="width: auto; margin-top: 0.6cm;">
+						Let $\mathcal{A}$ be a finite set of events in a probability space $\Omega$. For $A \in \mathcal{A}$ let $\Gamma(A)$ be a subset of $\mathcal{A}$ satisfying that $A$ is independent from the collection of events $\mathcal{A} \backslash(\{A\} \cup \Gamma(A))$. If there exists an assignment of reals $x: \mathcal{A} \rightarrow(0,1)$ such that:
+$$
+\forall A \in \mathcal{A}: \mathbb{P}(A) \leq x(A) \prod_{B \in \Gamma(A)}(1-x(B)),
+$$
+then the probability of avoiding all events in $\mathcal{A}$ is at least $\prod_{A \in \mathcal{A}}(1-x(A))$, in particular it is positive.
+					</blockquote>
+                </section>
+
+
+				
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 25px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Moser-Tardos Algorithm for LLL
+					</h3>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 24px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Previous Algorithmic Approaches
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li style="margin-bottom: 0.2cm;">
+									<strong>Beck (1991):</strong> If in a hypergraph, every edge contains at least $k$ vertices and shares common vertices with no more than roughly $2^{\frac{k}{48}}$ other edges, then a polytime algorithm can 2-color the vertices without producing a monochromatic edge.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									<strong>Alon (1991):</strong> Improved Beck's threshold to $2^{\frac{k}{8}}$ edges using a simple and randomized variant of Beck's algorithm .
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									<strong>Czumay and Scheideler (2000):</strong> Extended known algorithmic versions to general cases where the edges of the hypergraph in question need not be uniform.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									<strong>Srinivasan (2008):</strong> Improved Alon's threshold to $2^{\frac{k}{4}}$ edges along with a series of other improvements.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									<strong>Moser (2009):</strong> Improved Srinivasan's threshold to $\frac{2^{k}}{32}$ edges.
+								</li>
+							</ul>
+						</div>						
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 22px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Sequential Solver)
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li style="margin-bottom: 0.2cm;">
+									The authors only consider events determined by different subsets of mutually independent random variables.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									Let $\mathcal{P}$ be a finite collection of mutually independent random variables defined on a fixed probability space $\Omega$.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									We shall consider events $A$ that are determined by the values of some $S\subseteq\mathcal{P}$ of these variables. Let $\mathcal{A}$ denote the finite family of events in $\Omega$ determined by $\mathcal{P}.$
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									In such a case, we say that an evaluation of the variables in $S$ \emph{violates} $A$ if it makes $A$ happen.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									If $\mathcal{A}$ is determined by $\mathcal{P},$ then $\exists$ a minimal subset that completely determines $A$ $\in$ $\mathcal{A}.$ We denote this set of variables by $\text{vbl}(A)$.
+								</li>
+
+								<li style="margin-bottom: 0.2cm;">
+									We define <em>dependency graph</em> $\mathcal{G}_{\mathcal{A}}$ for $\mathcal{A}$ as a graph with vertex set $\mathcal{A}$ and edge set:
+      $$\mathcal{E} = \{(A,B):A\neq B \text{ but } \text{vbl}(A)\cap\text{vbl}(B)\neq\Phi\}$$ 
+								</li>
+
+								<li style="margin-bottom: 0.2cm;">
+									We further define $\Gamma_{\mathcal{A}}(A)$ to be the neighbourhood of $A$ in $\mathcal{G}.$
+								</li>
+							</ul>
+						</div>						
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 22px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Sequential Solver)
+						</h2>
+
+						<div class="r-hstack">
+							<img data-src="sp2020/mta-s.jpg" alt="sometext">
+							<br>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Complexity: Moser-Tardos (Sequential Solver)
+						</h2>
+
+						<blockquote style="width: auto;">
+							Consider the setup of the <strong>asymmetric LLL</strong>. If the LLL conditions are satisfied for $\mathcal{A},$ then $\exists$ an assignment of the variables in $\mathcal{P}$ not violating $\mathcal{A}.$ Further the expected total number of resampling steps before termination is at most $$\sum_{A\in\mathcal{A}}\frac{x(A)}{1-x(A)}$$
+						</blockquote>
+					</section>
+
+
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;">
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Parallelized Variant)
+						</h2>
+
+						<div style="margin-top: 0.6cm;">
+							<ul>
+								<li style="margin-bottom: 0.5cm;">
+									We start with the evaluation of the variables at a random point in $\Omega,$ then in every step we select a maximal independent set $\mathcal{T}$ in the subgraph of the dependency graph spanned by all the violated events.
+								</li>
+	
+								<li style="margin-bottom: 0.2cm;">
+									We then resample the variables associated with $T$ parallelly, i.e., we resample $\bigcup_{A\in\mathcal{A}}\text{vbl}(A)$ while keeping the variables in $\mathcal{P}\setminus\bigcup_{A\in\mathcal{A}}\text{vbl}(A)$ fixed.
+								</li>
+							</ul>
+						</div>						
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 22px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Algorithm: Moser-Tardos (Parallelized Variant)
+						</h2>
+
+						<div class="r-hstack">
+							<img data-src="sp2020/mta-p.jpg" alt="sometext">
+							<br>
+						</div>
+					</section>
+
+					<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 28px;" data-auto-animate>
+						<h2 style="font-size: 35px; margin-bottom: 1cm;">
+							Complexity: Moser-Tardos (Parallelized Variant)
+						</h2>
+
+						<blockquote style="width: auto;">
+							Consider the setup of the asymmetric LLL. We tweak the LLL assumptions slightly as follows:<br><br>
+  Suppose $\epsilon>0$ and $\exists$ an assignment $x:\mathcal{A}\rightarrow(0,1)$ such that:
+  $$\forall A \in \mathcal{A}:\hspace{3mm}\mathbb{P}(A)\leq(1-\epsilon)x(A)\prod_{B\in\Gamma_{\mathcal{A}}(A)}(1-x(B)).$$
+  Then the parallel version of the algorithm performs an expected $\mathcal{O}\left(\frac{1}{\epsilon}\log\sum_{A\in\mathcal{A}}\frac{x(A)}{1-x(A)}\right)$ number of resampling steps before termination.
+						</blockquote>
+					</section>
+                </section>
+
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.1 style="text-align: left; font-size: 30px;">
+					<div style="margin-top: 0.6cm; text-align: center; font-size: 50pt;">
+						<strong>Thank you</strong>
+					</div>
+                </section>
+
+            </div>
+        </div>
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/zoom/zoom.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script src="plugin/math/math.js"></script>
+        <script src="plugin/chalkboard/plugin.js"></script>
+        <script>
+            // More info about initialization & config:
+            // - https://revealjs.com/initialization/
+            // - https://revealjs.com/config/
+            Reveal.initialize({
+                hash: true,
+                transition: 'concave',
+				backgroundTransition: 'slide',
+                // controls: false,
+				controls: true,
+
+                // Display a presentation progress bar
+                progress: true,
+
+                // Push each slide change to the browser history
+                history: false,
+
+                // Enable keyboard shortcuts for navigation
+                keyboard: true,
+
+				slideNumber: true,
+
+				// Can be used to limit the contexts in which the slide number appears
+				// - "all":      Always show the slide number
+				// - "print":    Only when printing to PDF
+				// - "speaker":  Only in the speaker view
+				showSlideNumber: 'all',				
+
+                // Loop the presentation
+                loop: false,
+
+                // Number of milliseconds between automatically proceeding to the 
+                // next slide, disabled when set to 0
+                autoSlide: 0,
+
+                // Enable slide navigation via mouse wheel
+                mouseWheel: false,
+
+                // Apply a 3D roll to links on hover
+                rollingLinks: true,
+                // Learn about plugins: https://revealjs.com/plugins/
+                // chalkboard: {
+                    // src: "chalkboard/chalkboard.json",
+                    // toggleChalkboardButton: false,
+                    // toggleNotesButton: false,
+                // },
+                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ],
+            });
+        </script>
+    </body>
+</html>
