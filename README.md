@@ -1,3 +1,10 @@
+## Links to my presentations
+- Random Graphs: Local Lovasz Lemma - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-RG-LLL.html
+- Statistics Comprehensive - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-StatCompre-Paper-TSNE.html
+
+---
+
+
 <p align="center">
   <a href="https://revealjs.com">
   <img src="https://hakim-static.s3.amazonaws.com/reveal-js/logo/v1/reveal-black-text-sticker.png" alt="reveal.js" width="500">
