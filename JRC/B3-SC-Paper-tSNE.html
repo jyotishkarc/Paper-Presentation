@@ -1,0 +1,676 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>Visualizing Data using t-SNE</title>
+
+        <meta name="description" content="SP2020">
+        <meta name="author" content="Riddhiman Saha">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/night.css" id="theme">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+        <link href="css/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+        <link href="css/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-background="sp2020/network.gif" data-background-opacity=0.12 style="font-size: 33px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 id="heading" style="color: white; text-align: center; margin-bottom: 0.8cm; font-size: 60px;">
+                        <b>Visualizing Data using t-SNE</b>
+                    </h3>
+
+					<div data-id="authors" style="text-align: center; margin-bottom: 1cm;" data-auto-animate>
+						<em>Laurens van der Maaten</em> & <em>Geoffrey Hinton</em>
+                        <br>
+					</div>
+
+					<div style="text-align: center; margin-bottom: 0.8cm; font-size: 30px;" data-auto-animate>
+						<strong>Journal of Machine Learning Research, Vol. 9 (2008)</strong> 2579-2605
+					</div>
+                    <hr>
+                    <div style="text-align: center; margin-top: 1.5cm;">
+                        A presentation by:
+                        <br>
+					</div>
+					<div style="text-align: center; margin-top: 0.5cm;">
+                        <strong>Jyotishka Ray Choudhury (BS1903)</strong>
+                        <br>
+                        B.Stat 3rd Year<br>
+						Indian Statistical Institute, Kolkata
+                    </div>
+					<div style="text-align: center; margin-top: 0.8cm;">
+                        20th April, 2022
+                        <br>
+					</div>
+                </section>
+
+                <section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 id="heading" style="color: white; text-align: center; margin-bottom: 0.8cm; margin-top: 0.8cm; font-size: 60px;">
+                        <b>Visualizing Data using t-SNE</b>
+                    </h3>
+
+					<div data-id="authors" style="text-align: center; margin-bottom: 1cm; font-size: 35px;" data-auto-animate>
+						<em>Laurens van der Maaten</em> & <em>Geoffrey Hinton</em>
+                        <br>
+					</div>
+                    <hr>
+					<div class="r-stack">
+						<img data-src="sp2020/tsne-snip-border.jpg" alt="sometext"/>
+						<br>
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3>
+                        Introduction
+                    </h3>
+
+                    <strong>t-distributed Stochastic Neighbour Embedding</strong>, commonly known as <strong>t-SNE</strong>, is a statistical method for visualizing high-dimensional data, as well as a non-linear technique of dimension reduction.
+                    
+					<div style="margin-top: 0.7cm ;">
+						<ul>
+							<li class="fragment">
+								t-SNE is an <strong>unsupervised statistical learning algorithm</strong>, i.e. it works on unlabeled data
+								without any prior training.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.5cm ;">
+						<ul>
+							<li class="fragment">
+								t-SNE works by giving each datapoint a location in 2D or 3D space, preserving some structures 
+								in the original dataset.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3>
+                        Why t-SNE ?
+                    </h3>
+                    
+                    <div>
+						<ul>
+							<li class="fragment">
+								t-SNE has a huge scope of applicability in the field of biomedical and genetic research where researchers often encounter microarray-type datasets.
+								Due to a very high number of features, these sort of datasets are nearly impossible to visualize. t-SNE is one of the possible
+								methods which helps us in this regard.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								t-SNE is often employed in the field of cluster analysis where the local cluster structures
+								can be visualized quite well using t-SNE.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3 style="font-size: 50px;">
+                        Notations and Objective
+                    </h3>
+                    
+                    <div>
+						<ul>
+							<li class="fragment">
+								Suppose we have a dataset $\mathcal{X}$ with $n$ datapoints, say $X_1$, $X_2$, $\cdots$, $X_n$. Each $X_i$ has $d$ many features, i.e. $X_i \in \mathbb{R}^d$, where $d$ is large.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Often times, it is believed that the datapoints are lying on a lower-dimensional <em>manifold</em>. We wish to find out such a lower-dimensional embedding or mapping of $\mathcal{X}$, say $\mathcal{Y}$, where each $X_i$ maps to $Y_i$ in the low-dimensional space for $i = 1, 2, \cdots, n$.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								The embedding is expected to locally preserve the distances among each pair of points. So, in case some $X_i$ and $X_j$ are near each other in the actual dataset, their embeddings $Y_i$ and $Y_j$ are expected to lie in close proximity as well.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Stochastic Neighbour Embedding
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								The concept of <strong>Stochastic Neighbour Embedding (SNE)</strong> was introduced by Hinton and Roweis in their paper with the same title, published in NIPS (Neural Information Processing Systems), 2002.<br>
+							</li>
+						</ul>
+					</div>
+
+                    <div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								SNE starts by converting the high-dimensional Euclidean distances between datapoints into conditional probabilities that represent similarities.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Stochastic Neighbour Embedding
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						We shall be considering the following notations:
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								The conditional probability $p_{j|i}$ is defined to be the similarity of $X_j$ to $X_i$, i.e. the probability that $X_i$ would pick $X_j$ as its "neighbour" if neighbours were picked in proportion to their probability density under a normal density centered at $X_i$.<br>
+							</li>
+						</ul>
+					</div>
+
+                    <div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								For the low-dimensional counterparts $Y_i$ and $Y_j$ of $X_i$ and $X_j$, it is possible to compute an analogous conditional probability, which we shall denote by $q_{j|i}$.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Stochastic Neighbour Embedding
+                    </h3>
+
+					<div style="margin-top: 0.6cm;">
+						Let us summarize the contents of the last slide:
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								For each $X_i$, define : $$p_{j|i} ~\propto~ \exp\left(-\frac{||X_i - X_j||^2}{2\sigma_i^2}\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
+							</li>
+
+							<li class="fragment">
+								Similarly, for the low-dimensional counterpart $Y_i$, define : $$q_{j|i} ~\propto~ \exp\left(-||Y_i - Y_j||^2\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Stochastic Neighbour Embedding
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								For each $X_i$, define : $$p_{j|i} ~\propto~ \exp\left(-\frac{||X_i - X_j||^2}{2\sigma_i^2}\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
+							</li>
+
+							<li class="fragment">
+								Similarly, for the low-dimensional counterpart $Y_i$, define : $$q_{j|i} ~\propto~ \exp\left(-||Y_i - Y_j||^2\right)\qquad\text{for } j = 1,\cdots,n~;~j\neq i$$
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Stochastic Neighbour Embedding
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Note that the $\sigma_i$’s are chosen such that, for each datapoint , the ball centered at $X_i$ of radius $\sigma_i$ contains approximately same number of other datapoints. This is obtained through fixing the perplexity of the Gaussian distributions to a fixed quantity.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Any particular value of $\sigma_i$ induces a probability distribution, say $P_i$, over the complete set of datapoints.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)">
+                    <h3 data-id="heading-sne" style="font-size: 50px;">
+                        Stochastic Neighbour Embedding
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Perplexity is defined as :
+								$$\text{Perp}(P_i) = 2^{H(P_i)} = 2^{-\sum_j p_{j|i} \log_2 (p_{j|i})}$$ where $H(X_i)$ is the Shannon Entropy for the distribution $P_i$.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								The perplexity can be interpreted as a measure of the effective number of neighbours. The performance of SNE is fairly robust to changes in the perplexity, and its values typically lie in between $5$ and $50$.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
+                    <h3 data-id="heading-comparison" style="font-size: 50px;">
+                        Comparison of $\mathcal{X}$ and $\mathcal{Y}$ in SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In case the low-dimensional embedding $Y_i$ of $X_i$ is appropriate, we expect that ideally $p_{j|i}$ should be same as $q_{j|i}$ for all $j = 1, 2, \cdots, n$. So, if we denote $P_i = (p_{1|i}, \cdots, p_{n|i})$ and $Q_i = (q_{1|i}, \cdots, q_{n|i})$, then for a perfect embedding we shouldhave $P_i \approx Q_i$.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								However, that doesn't always happen. So, the authors decided to minimize the Kullback-Leibler Divergence between $P_i$ and $Q_i$ for each $X_i$.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate
+				data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)" data-transition="convex">
+                    <h3 data-id="heading-comparison" style="font-size: 50px;">
+                        Comparison of $\mathcal{X}$ and $\mathcal{Y}$ in SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In SNE, our objective is to minimize $$C = \sum_{i = 1}^n \text{KL}(P_i || Q_i) = \sum_{i=1}^n \sum_{j=1}^n p_{j|i} \log\left(\dfrac{p_{j|i}}{q_{j|i}}\right)$$ with respect to all the points $Y_i$ in the embedding.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								We minimize the cost function using some gradient descent technique, e.g. Newton-Raphson algorithm. The gradient for the $i$-th embedded point $Y_i$ is : $$\dfrac{\partial C}{\partial Y_i} = 2\sum_{j \neq i} (p_{j|i} - q_{j|i} + p_{i|j} - q_{i|j})(Y_i - Y_j)$$
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3 id="heading-iter-sne" style="font-size: 50px;">
+                        Iterations for SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Mathematically, the gradient update with a momentum term is given by : $$\mathcal{Y}^{(t)} = \mathcal{Y}^{(t-1)} + \eta\cdot\dfrac{\partial C}{\partial \mathcal{Y}^{(t-1)}} + \alpha(t)\cdot\big(\mathcal{Y}^{(t-1)} - \mathcal{Y}^{(t-2)}\big)$$ where $\mathcal{Y}^{(t)}$ indicates the solution using SNE at iteration $t$, $\eta$ indicates the learning rate, and $\alpha(t)$ represents the momentum at iteration $t$.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								These iterations are continued until we meet some convergence criterion on $\mathcal{Y}^{(t)}$.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3 style="font-size: 50px;">
+                        Crowding Problem
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Note that a higher dimension can accomodate more points at small distances, as compared to a lower dimension. For example, in 1D, only two points can be equidistant from a fixed point. But, in 2D, there exist infinitely many points (viz. a circle) that are are equidistant from that point.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In case of SNE, since we try to minimize each $\text{KL}(P_i||Q_i)$, so all such points would try to remain as close as possible in the lower-dimensional embedded space, which might create very dense clusters in the visualization. This is never desirable since we shall be losing information on the shapes of the clusters in data.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
+                    <h3 data-id="Hello" style="font-size: 50px;">
+                        Symmetric SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								The crowding problem can be avoided in most cases if we model the $p_{ij}$'s jointly, instead of considering the conditional probabilities $p_{j|i}$. We consider $$p_{ij} \propto \exp\left(-\frac{||X_i - X_j||^2}{2\sigma_i^2}\right)$$
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In that case, the concerned gradient becomes $$\dfrac{\partial C}{\partial Y_i} = 4\sum_{j \neq i} (p_{ij}- q_{ij})(Y_i - Y_j)$$
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
+                    <h3 data-id="Hello" style="font-size: 50px;">
+                        Symmetric SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In case $X_k$ is an outlier, note that all of the distances $||X_1-X_k||$, $||X_2-X_k||$, $\cdots$, $||X_n-X_k||$ should be very large. Thus, $p_{k1}, p_{k2}, \cdots, p_{kn}$ should be pretty small, and the contribution of $X_k$ in $C$ will be negligible.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In such a situation, we may consider $p_{ij} = \dfrac{1}{2n}\big(p_{j|i} + p_{i|j}\big)$.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Note that $\sum_j p_{ij} > \frac{1}{2n}$, i.e. each datapoint $X_i$ makes at least a significant contribution to the cost function $C$. This might help us in overcoming the outlier problem.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
+                    <h3 data-id="tsne" style="font-size: 50px;">
+                        Introduction to t-SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In the high-dimensional space, we convert distances into probabilities using a normal distribution. In the low-dimensional map, we can use a probability distribution that has much heavier tails than a Gaussian to convert distances into probabilities. This allows a moderate distance in the high-dimensional space to be faithfully modelled by a much larger distance in the map.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								One such choice of heavy-tailed distribution might be a $t$-distribution with $1$ degree of freedom (i.e. a Cauchy distribution).
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;" data-auto-animate>
+                    <h3 data-id="tsne" style="font-size: 50px;">
+                        Introduction to t-SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Following the last slide, let us consider $q_{ij} \propto \dfrac{1}{1+||Y_i - Y_j||^2}$.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In that case, the concerned gradient becomes $$\dfrac{\partial C}{\partial Y_i} = 4\sum_{j \neq i} (p_{ij}- q_{ij})(1+||Y_i - Y_j||^2)^{-1}(Y_i - Y_j)$$
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3 id="heading-iter-sne" style="font-size: 50px;">
+                        Iterations for t-SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Mathematically, the gradient update with a momentum term is given by : $$\mathcal{Y}^{(t)} = \mathcal{Y}^{(t-1)} + \eta\cdot\dfrac{\partial C}{\partial \mathcal{Y}^{(t-1)}} + \alpha(t)\cdot\big(\mathcal{Y}^{(t-1)} - \mathcal{Y}^{(t-2)}\big)$$ where $\mathcal{Y}^{(t)}$ indicates the solution using t-SNE at iteration $t$, $\eta$ indicates the learning rate, and $\alpha(t)$ represents the momentum at iteration $t$.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								These iterations are continued until we meet some convergence criterion on $\mathcal{Y}^{(t)}$.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3 id="appl" style="font-size: 50px;">
+                        Visualization of Datasets using t-SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								A large class of real as well as simulated datasets can be visualized pretty well in 2D using t-SNE. 
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In the next few slides, we shall see some 2D embeddings of some high-dimensional datasets, made using some different techniques including t-SNE, Sammon Mapping, Isomap, LLE etc.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left;">
+                    <h3 style="font-size: 40px;">
+                        Olivetti Faces Dataset
+					</h3>
+                    <hr>
+					<div class="r-stack">
+						<img data-src="sp2020/img2-all.jpg" alt="sometext" width="625" height="575">
+						<br>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left;">
+                    <h3 style="font-size: 40px;">
+                        COIL-20 Dataset
+					</h3>
+                    <hr>
+					<div class="r-hstack">
+						<img data-src="sp2020/img3-all.jpg" alt="sometext" width="625" height="525">
+						<br>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3 style="font-size: 50px;">
+                        Performance of t-SNE
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								In both of the aforementioned examples, we can clearly observe that the embeddings using t-SNE carries much more meaningful information about the clusters in the original data.
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								We can see some crowding issues in case of the other methods such as Isomap, Sammon Mapping etc. However, t-SNE has not faced this issue, thanks to the corrections that have been employed beforehand (discussed earlier).
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+                    <h3 style="font-size: 50px;">
+                        Drawbacks
+					</h3>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								For each iteration, the runtime complexity of t-SNE is $\mathcal{O}(n^2)$. This is reasonable for datasets with small or moderate number of datapoints. Nevertheless, for very large datasets, the necessary computations for t-SNE might take a lot of time which is impratical.  
+							</li>
+						</ul>
+					</div>
+
+					<div style="margin-top: 0.6cm;">
+						<ul>
+							<li class="fragment">
+								Due to its unsupervised nature, t-SNE can't be employed as a classification method. Consequently, whenever we get some new datapoints, all the computations are needed to be performed from the beginning which, again, might be very time-consuming.
+							</li>
+						</ul>
+					</div>
+                </section>
+
+
+				<section data-background="sp2020/bg-1.png" data-background-opacity=0.4 style="text-align: left; font-size: 30px;">
+					<div style="margin-top: 0.6cm; text-align: center; font-size: 50pt;">
+						<strong>Thank you</strong>
+					</div>
+                </section>
+
+            </div>
+        </div>
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/zoom/zoom.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script src="plugin/math/math.js"></script>
+        <script src="plugin/chalkboard/plugin.js"></script>
+        <script>
+            // More info about initialization & config:
+            // - https://revealjs.com/initialization/
+            // - https://revealjs.com/config/
+            Reveal.initialize({
+                hash: true,
+                transition: 'concave',
+				backgroundTransition: 'slide',
+                // controls: false,
+				controls: true,
+
+                // Display a presentation progress bar
+                progress: true,
+
+                // Push each slide change to the browser history
+                history: false,
+
+                // Enable keyboard shortcuts for navigation
+                keyboard: true,
+
+				slideNumber: true,
+
+				// Can be used to limit the contexts in which the slide number appears
+				// - "all":      Always show the slide number
+				// - "print":    Only when printing to PDF
+				// - "speaker":  Only in the speaker view
+				showSlideNumber: 'all',				
+
+                // Loop the presentation
+                loop: false,
+
+                // Number of milliseconds between automatically proceeding to the 
+                // next slide, disabled when set to 0
+                autoSlide: 0,
+
+                // Enable slide navigation via mouse wheel
+                mouseWheel: false,
+
+                // Apply a 3D roll to links on hover
+                rollingLinks: true,
+                // Learn about plugins: https://revealjs.com/plugins/
+                // chalkboard: {
+                    // src: "chalkboard/chalkboard.json",
+                    // toggleChalkboardButton: false,
+                    // toggleNotesButton: false,
+                // },
+                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ],
+            });
+        </script>
+    </body>
+</html>
