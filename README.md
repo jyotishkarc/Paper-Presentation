@@ -1,5 +1,5 @@
 ## Links to my presentations
-- Random Graphs: Local Lovasz Lemma - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-RG-LLL.html
+- Random Graphs: Local Lovász Lemma - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-RG-LLL.html
 - Statistics Comprehensive - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-StatCompre-Paper-TSNE.html
 
 ---
