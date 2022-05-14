@@ -1,6 +1,6 @@
 ## Links to my presentations
 - Random Graphs: Local Lovász Lemma - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-RG-LLL.html
-- Statistics Comprehensive: Paper presentation (t-SNE) - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-StatCompre-Paper-TSNE.html
+- Statistics Comprehensive: Paper (t-SNE) - https://jyotishkarc.github.io/Reveal-JS-Presentations/B3-StatCompre-Paper-TSNE.html
 
 ---
 <p align="center">
